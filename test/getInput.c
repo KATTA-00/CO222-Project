@@ -29,6 +29,7 @@ int main()
     {
         words[count][0] = '\0';
         fgets(&words[count][0], wordLen, stdin);
+
         if (strlen(&words[count][0]) == 1)
             break;
 
