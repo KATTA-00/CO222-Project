@@ -16,11 +16,8 @@ int main()
 
     for (int i = 0; i < gridRow; i++)
     {
-        for (int j = 0; j < gridCol; j++)
-        {
-            scanf("%c", &grid[i][j]);
-        }
-        scanf("%c", &temp);
+
+        scanf("%[^\n]%*c\n", &grid[i][0]);
     }
 
     scanf("%c", &temp);
