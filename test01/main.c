@@ -1,12 +1,14 @@
 #include <stdio.h>
+#include <string.h>
 
-// predefined size
+#define gridRow 4
+#define gridCol 4
+#define wordsNum 16
+#define wordLen 10
+
 #define maxSpacelen 10
-#define rows 4
-#define cols 4
-#define max ((rows > cols) ? rows : cols)
+#define max ((gridRow > gridCol) ? gridRow : gridCol)
 
-// structs for check the cells and spaceCoordinates
 typedef struct _
 {
     int horiCheck;
@@ -19,13 +21,12 @@ typedef struct __
     int y;
 } spaceCoordinate;
 
-// global variables
 spaceCoordinate spacesCords[maxSpacelen][max];
 int spaceLen[maxSpacelen] = {0};
 int spaceCount = 0;
-cellCheck cordCheck[rows][cols];
+cellCheck cordCheck[gridRow][gridCol];
 
-int checkCell(int x, int y, char arr[rows][cols])
+int checkCell(int x, int y, char arr[gridRow][gridCol])
 {
     if (arr[x][y] == '#')
         return 1;
@@ -43,11 +44,11 @@ int isInArr(int n, int arr[], int size)
     return 0;
 }
 
-void updateVertical(int x, int y, char arr[rows][cols])
+void updateVertical(int x, int y, char arr[gridRow][gridCol])
 {
     int tempX = x;
     int i = 0;
-    while (tempX < rows)
+    while (tempX < gridRow)
     {
         if (checkCell(tempX, y, arr))
         {
@@ -87,11 +88,11 @@ void updateVertical(int x, int y, char arr[rows][cols])
     }
 }
 
-void updateHorizon(int x, int y, char arr[rows][cols])
+void updateHorizon(int x, int y, char arr[gridRow][gridCol])
 {
     int tempY = y;
     int i = 0;
-    while (tempY < cols)
+    while (tempY < gridCol)
     {
         if (checkCell(x, tempY, arr))
         {
@@ -143,9 +144,9 @@ void initializeSpaceVar()
         }
     }
 
-    for (int i = 0; i < rows; i++)
+    for (int i = 0; i < gridRow; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j = 0; j < gridCol; j++)
         {
             cordCheck[i][j].horiCheck = 1;
             cordCheck[i][j].verCheck = 1;
@@ -153,13 +154,13 @@ void initializeSpaceVar()
     }
 }
 
-void updateSpaceVar(char arr[rows][cols])
+void updateSpaceVar(char arr[gridRow][gridCol])
 {
     initializeSpaceVar();
 
-    for (int i = 0; i < rows; i++)
+    for (int i = 0; i < gridRow; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j = 0; j < gridCol; j++)
         {
             if (checkCell(i, j, arr))
             {
@@ -181,30 +182,42 @@ void updateSpaceVar(char arr[rows][cols])
 int main()
 {
 
-    // char arr[rows][cols] = {{'*', '*', '*', '*'},
-    //                         {'#', '#', '#', '#'},
-    //                         {'*', '*', '*', '*'},
-    //                         {'*', '#', '#', '#'}};
+    char grid[gridRow][gridCol];
+    char temp;
+    char words[wordsNum][wordLen];
+    int count = 0;
 
-    char arr[rows][cols] = {{'*', '#', '*', '*'},
-                            {'#', '#', '#', '#'},
-                            {'*', '#', '*', '*'},
-                            {'*', '*', '*', '*'}};
-
-    int wordLengths[] = {4, 3};
-    int words = 2;
-
-    updateSpaceVar(arr);
-
-    printf("%d\n", spaceCount);
-
-    for (int i = 0; i < maxSpacelen; i++)
+    for (int i = 0; i < gridRow; i++)
     {
-        for (int j = 0; j < max; j++)
+        for (int j = 0; j < gridCol; j++)
         {
-            printf("(%d %d)  ", spacesCords[i][j].x, spacesCords[i][j].y);
+            scanf("%c", &grid[i][j]);
         }
-        printf(" - %d \n", spaceLen[i]);
+        scanf("%c", &temp);
+    }
+
+    scanf("%c", &temp);
+
+    while (count < wordsNum)
+    {
+        words[count][0] = '\0';
+        fgets(&words[count][0], wordLen, stdin);
+
+        if (strlen(&words[count][0]) == 1)
+            break;
+
+        count++;
+    }
+
+    updateSpaceVar(grid);
+
+    for (int i = 0; i < gridRow; i++)
+    {
+        for (int j = 0; j < gridCol; j++)
+        {
+            printf("%c", grid[i][j]);
+        }
+        printf("\n");
     }
 
     return 0;
