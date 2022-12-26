@@ -5,7 +5,6 @@
 #define gridCol 4
 #define wordsNum 16
 #define wordLen 10
-
 #define maxSpacelen 10
 #define max ((gridRow > gridCol) ? gridRow : gridCol)
 
@@ -61,20 +60,6 @@ void updateVertical(int x, int y, char arr[gridRow][gridCol])
             break;
         tempX++;
     }
-    x--;
-    while (x >= 0)
-    {
-        if (checkCell(x, y, arr))
-        {
-            spacesCords[spaceCount][i].x = x;
-            spacesCords[spaceCount][i].y = y;
-            cordCheck[x][y].verCheck = 0;
-            i++;
-        }
-        else
-            break;
-        x--;
-    }
 
     if (i != 1)
     {
@@ -104,21 +89,6 @@ void updateHorizon(int x, int y, char arr[gridRow][gridCol])
         else
             break;
         tempY++;
-    }
-    y--;
-    while (y >= 0)
-    {
-
-        if (checkCell(x, y, arr))
-        {
-            spacesCords[spaceCount][i].x = x;
-            spacesCords[spaceCount][i].y = y;
-            cordCheck[x][y].horiCheck = 0;
-            i++;
-        }
-        else
-            break;
-        y--;
     }
 
     if (i != 1)
@@ -189,11 +159,7 @@ int main()
 
     for (int i = 0; i < gridRow; i++)
     {
-        for (int j = 0; j < gridCol; j++)
-        {
-            scanf("%c", &grid[i][j]);
-        }
-        scanf("%c", &temp);
+        scanf("%[^\n]%*c\n", &grid[i][0]);
     }
 
     scanf("%c", &temp);

@@ -12,15 +12,12 @@ int main()
     char grid[gridRow][gridCol];
     char temp;
     char words[wordsNum][wordLen];
+    int wordsLens[wordsNum] = {0};
     int count = 0;
 
     for (int i = 0; i < gridRow; i++)
     {
-        for (int j = 0; j < gridCol; j++)
-        {
-            scanf("%c", &grid[i][j]);
-        }
-        scanf("%c", &temp);
+        scanf("%[^\n]%*c\n", &grid[i][0]);
     }
 
     scanf("%c", &temp);
@@ -34,6 +31,11 @@ int main()
             break;
 
         count++;
+    }
+
+    for (int i = 0; i < count; i++)
+    {
+        wordsLens[i] = strlen(&words[i][0]);
     }
 
     for (int i = 0; i < gridRow; i++)

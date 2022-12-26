@@ -60,20 +60,6 @@ void updateVertical(int x, int y, char arr[rows][cols], int wordLens[], int word
             break;
         tempX++;
     }
-    x--;
-    while (x >= 0)
-    {
-        if (checkCell(x, y, arr))
-        {
-            spacesCords[spaceCount][i].x = x;
-            spacesCords[spaceCount][i].y = y;
-            cordCheck[x][y].verCheck = 0;
-            i++;
-        }
-        else
-            break;
-        x--;
-    }
 
     if (isInArr(i, wordLens, words))
     {
@@ -106,21 +92,6 @@ void updateHorizon(int x, int y, char arr[rows][cols], int wordLens[], int words
         else
             break;
         tempY++;
-    }
-    y--;
-    while (y >= 0)
-    {
-
-        if (checkCell(x, y, arr))
-        {
-            spacesCords[spaceCount][i].x = x;
-            spacesCords[spaceCount][i].y = y;
-            cordCheck[x][y].horiCheck = 0;
-            i++;
-        }
-        else
-            break;
-        y--;
     }
 
     if (isInArr(i, wordLens, words))
