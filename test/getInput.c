@@ -16,14 +16,13 @@ int main()
 
     for (int i = 0; i < gridRow; i++)
     {
-        for (int j = 0; j < gridCol; j++)
-        {
-            scanf("%[^\n]%c\n", &grid[i][j]);
-        }
+
+        scanf("%[^\n]%*c\n", &grid[i][0]);
+
         //scanf("%c", &temp);
     }
 
-    //scanf("%c", &temp);
+    scanf("%c", &temp);
 
     while (count < wordsNum)
     {
