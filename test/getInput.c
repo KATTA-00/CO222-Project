@@ -18,8 +18,6 @@ int main()
     {
 
         scanf("%[^\n]%*c\n", &grid[i][0]);
-
-        //scanf("%c", &temp);
     }
 
     scanf("%c", &temp);
