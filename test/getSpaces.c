@@ -56,6 +56,8 @@ void updateVertical(int x, int y, char arr[rows][cols], int wordLens[], int word
             cordCheck[tempX][y].verCheck = 0;
             i++;
         }
+        else
+            break;
         tempX++;
     }
     x--;
@@ -68,6 +70,8 @@ void updateVertical(int x, int y, char arr[rows][cols], int wordLens[], int word
             cordCheck[x][y].verCheck = 0;
             i++;
         }
+        else
+            break;
         x--;
     }
 
@@ -99,6 +103,8 @@ void updateHorizon(int x, int y, char arr[rows][cols], int wordLens[], int words
             cordCheck[x][tempY].horiCheck = 0;
             i++;
         }
+        else
+            break;
         tempY++;
     }
     y--;
@@ -112,6 +118,8 @@ void updateHorizon(int x, int y, char arr[rows][cols], int wordLens[], int words
             cordCheck[x][y].horiCheck = 0;
             i++;
         }
+        else
+            break;
         y--;
     }
 

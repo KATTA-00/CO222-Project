@@ -43,7 +43,7 @@ int isInArr(int n, int arr[], int size)
     return 0;
 }
 
-void updateVertical(int x, int y, char arr[rows][cols], int wordLens[], int words)
+void updateVertical(int x, int y, char arr[rows][cols])
 {
     int tempX = x;
     int i = 0;
@@ -56,6 +56,8 @@ void updateVertical(int x, int y, char arr[rows][cols], int wordLens[], int word
             cordCheck[tempX][y].verCheck = 0;
             i++;
         }
+        else
+            break;
         tempX++;
     }
     x--;
@@ -68,25 +70,24 @@ void updateVertical(int x, int y, char arr[rows][cols], int wordLens[], int word
             cordCheck[x][y].verCheck = 0;
             i++;
         }
+        else
+            break;
         x--;
     }
 
-    if (isInArr(i, wordLens, words))
+    if (i != 1)
     {
         spaceLen[spaceCount] = i;
         spaceCount++;
     }
     else
     {
-        for (int i = 0; i < max; i++)
-        {
-            spacesCords[spaceCount][i].x = -1;
-            spacesCords[spaceCount][i].y = -1;
-        }
+        spacesCords[spaceCount][0].x = -1;
+        spacesCords[spaceCount][0].y = -1;
     }
 }
 
-void updateHorizon(int x, int y, char arr[rows][cols], int wordLens[], int words)
+void updateHorizon(int x, int y, char arr[rows][cols])
 {
     int tempY = y;
     int i = 0;
@@ -99,6 +100,8 @@ void updateHorizon(int x, int y, char arr[rows][cols], int wordLens[], int words
             cordCheck[x][tempY].horiCheck = 0;
             i++;
         }
+        else
+            break;
         tempY++;
     }
     y--;
@@ -112,21 +115,20 @@ void updateHorizon(int x, int y, char arr[rows][cols], int wordLens[], int words
             cordCheck[x][y].horiCheck = 0;
             i++;
         }
+        else
+            break;
         y--;
     }
 
-    if (isInArr(i, wordLens, words))
+    if (i != 1)
     {
         spaceLen[spaceCount] = i;
         spaceCount++;
     }
     else
     {
-        for (int i = 0; i < max; i++)
-        {
-            spacesCords[spaceCount][i].x = -1;
-            spacesCords[spaceCount][i].y = -1;
-        }
+        spacesCords[spaceCount][0].x = -1;
+        spacesCords[spaceCount][0].y = -1;
     }
 }
 
@@ -164,12 +166,12 @@ void updateSpaceVar(char arr[rows][cols], int wordLenArr[], int wordCount)
 
                 if (cordCheck[i][j].horiCheck)
                 {
-                    updateHorizon(i, j, arr, wordLenArr, wordCount);
+                    updateHorizon(i, j, arr);
                 }
 
                 if (cordCheck[i][j].verCheck)
                 {
-                    updateVertical(i, j, arr, wordLenArr, wordCount);
+                    updateVertical(i, j, arr);
                 }
             }
         }
