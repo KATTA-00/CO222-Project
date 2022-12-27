@@ -155,24 +155,24 @@ int main()
     char grid[gridRow][gridCol];
     char temp;
     char words[wordsNum][wordLen];
-    int count = 0;
+    int wordLens[wordsNum];
+    int wordCount = 0;
 
     for (int i = 0; i < gridRow; i++)
     {
         scanf("%[^\n]%*c\n", &grid[i][0]);
     }
 
-    scanf("%c", &temp);
-
-    while (count < wordsNum)
+    while (wordCount < wordsNum)
     {
-        words[count][0] = '\0';
-        fgets(&words[count][0], wordLen, stdin);
+        words[wordCount][0] = '\0';
+        fgets(&words[wordCount][0], wordLen, stdin);
 
-        if (strlen(&words[count][0]) == 1)
+        if (strlen(&words[wordCount][0]) == 1)
             break;
 
-        count++;
+        wordLens[wordCount] = strlen(&words[wordCount][0]) - 1;
+        wordCount++;
     }
 
     updateSpaceVar(grid);
@@ -184,6 +184,11 @@ int main()
             printf("%c", grid[i][j]);
         }
         printf("\n");
+    }
+
+    for (int i = 0; i < wordCount; i++)
+    {
+        printf("%d ", wordLens[i]);
     }
 
     return 0;
