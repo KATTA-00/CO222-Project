@@ -25,6 +25,11 @@ int spaceLen[maxSpacelen] = {0};
 int spaceCount = 0;
 cellCheck cordCheck[gridRow][gridCol];
 
+char grid[gridRow][gridCol];
+char words[wordsNum][wordLen];
+int wordLens[wordsNum];
+int wordCount = 0;
+
 int checkCell(int x, int y, char arr[gridRow][gridCol])
 {
     if (arr[x][y] == '#')
@@ -105,14 +110,6 @@ void updateHorizon(int x, int y, char arr[gridRow][gridCol])
 
 void initializeSpaceVar()
 {
-    for (int i = 0; i < maxSpacelen; i++)
-    {
-        for (int j = 0; j < max; j++)
-        {
-            spacesCords[i][j].x = -1;
-            spacesCords[i][j].y = -1;
-        }
-    }
 
     for (int i = 0; i < gridRow; i++)
     {
@@ -124,7 +121,7 @@ void initializeSpaceVar()
     }
 }
 
-void updateSpaceVar(char arr[gridRow][gridCol])
+void updateSpaceVar()
 {
     initializeSpaceVar();
 
@@ -132,31 +129,25 @@ void updateSpaceVar(char arr[gridRow][gridCol])
     {
         for (int j = 0; j < gridCol; j++)
         {
-            if (checkCell(i, j, arr))
+            if (checkCell(i, j, grid))
             {
 
                 if (cordCheck[i][j].horiCheck)
                 {
-                    updateHorizon(i, j, arr);
+                    updateHorizon(i, j, grid);
                 }
 
                 if (cordCheck[i][j].verCheck)
                 {
-                    updateVertical(i, j, arr);
+                    updateVertical(i, j, grid);
                 }
             }
         }
     }
 }
 
-int main()
+void getInputs()
 {
-
-    char grid[gridRow][gridCol];
-    char words[wordsNum][wordLen];
-    int wordLens[wordsNum];
-    int wordCount = 0;
-
     for (int i = 0; i < gridRow; i++)
     {
         scanf("%[^\n]%*c\n", &grid[i][0]);
@@ -171,11 +162,17 @@ int main()
             break;
 
         wordLens[wordCount] = strlen(&words[wordCount][0]) - 1;
-        wordCount++;
+        (wordCount)++;
     }
+}
 
-    updateSpaceVar(grid);
+int main()
+{
 
+    getInputs();
+    updateSpaceVar();
+
+    //////////////////////////////////////////////////////////////////////////////
     for (int i = 0; i < gridRow; i++)
     {
         for (int j = 0; j < gridCol; j++)
@@ -189,13 +186,12 @@ int main()
     {
         printf("%d ", wordLens[i]);
     }
-
     printf("\n");
 
     for (int i = 0; i < spaceCount; i++)
     {
         printf("%d ", spaceLen[i]);
     }
-
+    ////////////////////////////////////////////////////////////////////////////////
     return 0;
 }

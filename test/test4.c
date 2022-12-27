@@ -25,6 +25,11 @@ int spaceLen[maxSpacelen] = {0};
 int spaceCount = 0;
 cellCheck cordCheck[gridRow][gridCol];
 
+char grid[gridRow][gridCol];
+char words[wordsNum][wordLen];
+int wordLens[wordsNum];
+int wordCount = 0;
+
 int checkCell(int x, int y, char arr[gridRow][gridCol])
 {
     if (arr[x][y] == '#')
@@ -149,33 +154,33 @@ void updateSpaceVar(char arr[gridRow][gridCol])
     }
 }
 
-int main()
+void getInputs(char grid[gridRow][gridCol], char words[wordsNum][wordLen], int wordsLens[wordsNum], int *count)
 {
-
-    char grid[gridRow][gridCol];
-    char words[wordsNum][wordLen];
-    int wordLens[wordsNum];
-    int wordCount = 0;
-
     for (int i = 0; i < gridRow; i++)
     {
         scanf("%[^\n]%*c\n", &grid[i][0]);
     }
 
-    while (wordCount < wordsNum)
+    while (*count < wordsNum)
     {
-        words[wordCount][0] = '\0';
-        fgets(&words[wordCount][0], wordLen, stdin);
+        words[*count][0] = '\0';
+        fgets(&words[*count][0], wordLen, stdin);
 
-        if (strlen(&words[wordCount][0]) == 1)
+        if (strlen(&words[*count][0]) == 1)
             break;
 
-        wordLens[wordCount] = strlen(&words[wordCount][0]) - 1;
-        wordCount++;
+        wordsLens[*count] = strlen(&words[*count][0]) - 1;
+        (*count)++;
     }
+}
 
+int main()
+{
+
+    getInputs(grid, words, wordLens, &wordCount);
     updateSpaceVar(grid);
 
+    //////////////////////////////////////////////////////////////////////////////
     for (int i = 0; i < gridRow; i++)
     {
         for (int j = 0; j < gridCol; j++)
@@ -189,7 +194,6 @@ int main()
     {
         printf("%d ", wordLens[i]);
     }
-
     printf("\n");
 
     for (int i = 0; i < spaceCount; i++)
