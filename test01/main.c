@@ -190,7 +190,9 @@ int main()
     {
         printf("%d ", wordLens[i]);
     }
+
     printf("\n");
+
     for (int i = 0; i < spaceCount; i++)
     {
         printf("%d ", spaceLen[i]);
