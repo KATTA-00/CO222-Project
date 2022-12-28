@@ -1,50 +1,41 @@
 #include <stdio.h>
 
-typedef struct _
+int arr1[] = {4, 3};
+int arr1len = 2;
+int arr2[] = {3, 4, 2, 1};
+int arr2len = 4;
+
+int isSubset()
 {
-    int horiCheck;
-    int verCheck;
-} coord;
+    int arrTemp[arr2len];
+    for (int i = 0; i < arr2len; i++)
+    {
+        arrTemp[i] = arr2[i];
+    }
+
+    int flag = 0;
+    for (int i = 0; i < arr1len; i++)
+    {
+        flag = 1;
+        for (int j = 0; j < arr2len; j++)
+        {
+            if (arr1[i] == arrTemp[j])
+            {
+                flag = 0;
+                arrTemp[j] = -1;
+                break;
+            }
+        }
+
+        if (flag)
+            return 0;
+    }
+
+    return 1;
+}
 
 int main()
 {
-
-    char arr[4][4] = {{'#', '#', '*', '#'},
-                      {'#', '#', '*', '#'},
-                      {'#', '*', '*', '*'},
-                      {'#', '#', '*', '#'}};
-
-    coord cordCheck[4][4];
-
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            printf("%c ", arr[i][j]);
-            cordCheck[i][j].horiCheck = 0;
-            cordCheck[i][j].verCheck = 0;
-        }
-        printf("\n");
-    }
-
-    int count = 0;
-    int x, y;
-    int horiSearch[10][2];
-    int vertSearch[10][2];
-
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            count = 0;
-            if (arr[i][j] == '*')
-            {
-                x = i;
-                y = j;
-                count++;
-            }
-        }
-    }
-
+    printf("%d", isSubset());
     return 0;
 }
