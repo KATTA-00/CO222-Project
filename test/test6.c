@@ -158,19 +158,19 @@ void getInputs()
         fgets(&words[wordCount][0], wordLen, stdin);
 
         // for hackerank
-        // if (strlen(&words[wordCount][0]) == 0)
-        //     break;
+        if (strlen(&words[wordCount][0]) == 0)
+            break;
         //
 
-        if (strlen(&words[wordCount][0]) == 1)
-            break;
+        // if (strlen(&words[wordCount][0]) == 1)
+        //     break;
 
         wordLens[wordCount] = strlen(&words[wordCount][0]) - 1;
         (wordCount)++;
     }
 
     // for hackerank
-    //(wordLens[wordCount - 1])++;
+    (wordLens[wordCount - 1])++;
     //
 }
 
