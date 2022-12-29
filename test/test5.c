@@ -299,8 +299,21 @@ int word2space(int n, char word[wordLen], spaceCoordinate cord[max])
     return 0;
 }
 
-void gridFill(int wordStart, int spaceStart)
+int gridFill(int wordStart, int spaceStart)
 {
+    if (wordCount == spaceCount)
+    {
+        for (int i = 0; i < wordCount; i++)
+        {
+            if (word2space(wordLens[i], &words[i][0], &spacesCords[i][0]))
+            {
+                printf("IMPOSSIBLE\n");
+                return 0;
+            }
+        }
+    }
+
+    return 1;
 }
 
 int main()
@@ -313,22 +326,22 @@ int main()
 
     if (isSubset() == 0)
         printf("IMPOSSIBLE\n");
-
-    printGrid();
+    else if (gridFill(0, 0))
+        printGrid();
 
     //////////////////////////////////////////////////////////////////////////////
 
-    printf("%d\n", wordCount);
-    for (int i = 0; i < wordCount; i++)
-    {
-        printf("%d ", wordLens[i]);
-    }
-    printf("\n%d\n", spaceCount);
+    // printf("%d\n", wordCount);
+    // for (int i = 0; i < wordCount; i++)
+    // {
+    //     printf("%d ", wordLens[i]);
+    // }
+    // printf("\n%d\n", spaceCount);
 
-    for (int i = 0; i < spaceCount; i++)
-    {
-        printf("%d ", spaceLens[i]);
-    }
+    // for (int i = 0; i < spaceCount; i++)
+    // {
+    //     printf("%d ", spaceLens[i]);
+    // }
 
     //printf("\n%d", isSubset());
 
