@@ -3,6 +3,8 @@
 
 #define gridRow 6
 #define gridCol 6
+// int gridRow = 20;
+// int gridCol = 20;
 #define wordsNum 16
 #define wordLen 10
 #define maxSpacelen 10

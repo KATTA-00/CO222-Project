@@ -1,17 +1,29 @@
 #include <stdio.h>
 #include <string.h>
 
-#define gridRow 4
-#define gridCol 4
+// #define gridRow 4
+//#define gridCol 4
 #define wordsNum 16
 #define wordLen 10
 
+int gridRow = 10;
+int gridCol = 10;
+
 void getInputs(char grid[gridRow][gridCol], char words[wordsNum][wordLen], int wordsLens[wordsNum], int *count)
 {
-    for (int i = 0; i < gridRow; i++)
+    gridRow = 0;
+    while (1)
     {
-        scanf("%[^\n]%*c\n", &grid[i][0]);
+        grid[gridRow][0] = '\0';
+        fgets(&grid[gridRow][0], gridCol, stdin);
+
+        if (strlen(&grid[gridRow][0]) == 1)
+            break;
+
+        gridRow++;
     }
+
+    gridCol = strlen(&grid[0][0]) - 1;
 
     while (*count < wordsNum)
     {
