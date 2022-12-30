@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define gridRow 4
-#define gridCol 4
+#define gridRow 6
+#define gridCol 6
 #define wordsNum 16
 #define wordLen 10
 #define maxSpacelen 10
@@ -390,6 +390,7 @@ int Fill(int arrSpaceLens[], int arrWordLens[], char arrGrid[gridRow][gridCol], 
     int tempWordNum = wordNum;
     int returnVal;
     int temp;
+    int temp1;
 
     for (int i = 0; i < spaceCount; i++)
     {
@@ -403,7 +404,7 @@ int Fill(int arrSpaceLens[], int arrWordLens[], char arrGrid[gridRow][gridCol], 
     {
         for (int j = 0; j < gridCol; j++)
         {
-            tempGrid[i][j] = arrGrid[i][j];
+            tempGrid[i][j] = grid[i][j];
         }
     }
 
@@ -413,23 +414,46 @@ int Fill(int arrSpaceLens[], int arrWordLens[], char arrGrid[gridRow][gridCol], 
     int n = 0;
     int flag = 1;
 
-    for (int j = wordNum; j < wordCount; j++)
+    for (int j = 0; j < wordCount; j++)
     {
         flag = 1;
+        if (tempWordLens[j] == -1)
+            continue;
+
         for (int i = 0; i < spaceCount; i++)
         {
+            if (tempSpaceLens[i] == -1)
+                continue;
+
             if (tempSpaceLens[i] == tempWordLens[j] && (word2space(tempSpaceLens[i], &words[j][0], &spacesCords[i][0]) == 0))
             {
                 flag = 0;
                 temp = tempSpaceLens[i];
+                temp1 = tempWordLens[j];
                 tempSpaceLens[i] = -1;
-                returnVal = Fill(tempSpaceLens, tempWordLens, tempGrid, tempWordNum);
+                tempWordLens[j] = -1;
+                if (Fill(tempSpaceLens, tempWordLens, tempGrid, tempWordNum))
+                {
+                    tempSpaceLens[i] = temp;
+                    tempWordLens[j] = temp1;
+                    for (int i = 0; i < gridRow; i++)
+                    {
+                        for (int j = 0; j < gridCol; j++)
+                        {
+                            grid[i][j] = tempGrid[i][j];
+                        }
+                    }
+                }
             }
 
             if (checkGridFill())
             {
                 return 0;
             }
+        }
+        if (flag)
+        {
+            return 1;
         }
     }
 

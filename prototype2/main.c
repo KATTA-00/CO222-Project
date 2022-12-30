@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define gridRow 4
-#define gridCol 4
+#define gridRow 6
+#define gridCol 6
 #define wordsNum 16
 #define wordLen 10
 #define maxSpacelen 10
@@ -34,7 +34,7 @@ int wordCount = 0;
 
 int checkCell(int x, int y, char arr[gridRow][gridCol])
 {
-    if (arr[x][y] == '#')
+    if (arr[x][y] != '*')
         return 1;
     return 0;
 }
@@ -251,67 +251,12 @@ void swapInt(int *xp, int *yp)
     *yp = temp;
 }
 
-void swapSpaceCords(spaceCoordinate arr1[max], spaceCoordinate arr2[max])
-{
-    spaceCoordinate temp[max];
-
-    for (int i = 0; i < max; i++)
-    {
-        temp[i].x = arr1[i].x;
-        temp[i].y = arr1[i].y;
-    }
-    for (int i = 0; i < max; i++)
-    {
-        arr1[i].x = arr2[i].x;
-        arr1[i].y = arr2[i].y;
-    }
-    for (int i = 0; i < max; i++)
-    {
-        arr2[i].x = temp[i].x;
-        arr2[i].y = temp[i].y;
-    }
-}
-
 void swapWords(char arr1[], char arr2[])
 {
     char temp[wordLen];
     strcpy(temp, arr1);
     strcpy(arr1, arr2);
     strcpy(arr2, temp);
-}
-
-void sortWords()
-{
-
-    for (int i = 0; i < wordCount - 1; i++)
-    {
-
-        for (int j = 0; j < wordCount - i - 1; j++)
-        {
-            if (wordLens[j] < wordLens[j + 1])
-            {
-                swapInt(&wordLens[j], &wordLens[j + 1]);
-                swapWords(&words[j][0], &words[j + 1][0]);
-            }
-        }
-    }
-}
-
-void sortSpaceCord()
-{
-
-    for (int i = 0; i < spaceCount - 1; i++)
-    {
-
-        for (int j = 0; j < spaceCount - i - 1; j++)
-        {
-            if (spaceLens[j] < spaceLens[j + 1])
-            {
-                swapInt(&spaceLens[j], &spaceLens[j + 1]);
-                swapSpaceCords(&spacesCords[j][0], &spacesCords[j + 1][0]);
-            }
-        }
-    }
 }
 
 void sortWordOccur()
@@ -362,8 +307,6 @@ int word2space(int n, char word[wordLen], spaceCoordinate cord[max])
         }
     }
 
-    //printGrid();
-
     return 0;
 }
 
@@ -382,14 +325,13 @@ int checkGridFill()
     return 1;
 }
 
-int Fill(int arrSpaceLens[], int arrWordLens[], char arrGrid[gridRow][gridCol], int wordNum)
+int Fill(int arrSpaceLens[], int arrWordLens[])
 {
     int tempSpaceLens[spaceCount];
     int tempWordLens[wordCount];
     char tempGrid[gridRow][gridCol];
-    int tempWordNum = wordNum;
-    int returnVal;
     int temp;
+    int temp1;
 
     for (int i = 0; i < spaceCount; i++)
     {
@@ -403,61 +345,50 @@ int Fill(int arrSpaceLens[], int arrWordLens[], char arrGrid[gridRow][gridCol], 
     {
         for (int j = 0; j < gridCol; j++)
         {
-            tempGrid[i][j] = arrGrid[i][j];
+            tempGrid[i][j] = grid[i][j];
         }
     }
 
-    if (wordNum < wordCount)
-        tempWordNum++;
-
-    int n = 0;
     int flag = 1;
-
-    for (int j = wordNum; j < wordCount; j++)
+    for (int j = 0; j < wordCount; j++)
     {
         flag = 1;
+        if (tempWordLens[j] == -1)
+            continue;
+
         for (int i = 0; i < spaceCount; i++)
         {
+            if (tempSpaceLens[i] == -1)
+                continue;
+
             if (tempSpaceLens[i] == tempWordLens[j] && (word2space(tempSpaceLens[i], &words[j][0], &spacesCords[i][0]) == 0))
             {
                 flag = 0;
                 temp = tempSpaceLens[i];
+                temp1 = tempWordLens[j];
                 tempSpaceLens[i] = -1;
-                returnVal = Fill(tempSpaceLens, tempWordLens, tempGrid, tempWordNum);
+                tempWordLens[j] = -1;
+                if (Fill(tempSpaceLens, tempWordLens))
+                {
+                    tempSpaceLens[i] = temp;
+                    tempWordLens[j] = temp1;
+                    for (int i = 0; i < gridRow; i++)
+                    {
+                        for (int j = 0; j < gridCol; j++)
+                        {
+                            grid[i][j] = tempGrid[i][j];
+                        }
+                    }
+                }
             }
-
-            if (checkGridFill())
-            {
-                return 0;
-            }
+        }
+        if (flag)
+        {
+            return 1;
         }
     }
 
     return 0;
-}
-
-int gridFill()
-{
-    if (wordCount == spaceCount)
-    {
-        sortSpaceCord();
-        sortWords();
-
-        for (int i = 0; i < wordCount; i++)
-        {
-            if (word2space(wordLens[i], &words[i][0], &spacesCords[i][0]))
-            {
-                //printf("IMPOSSIBLE\n");
-                return 0;
-            }
-        }
-    }
-
-    if (checkGridFill())
-        return 1;
-    else
-        //printf("IMPOSSIBLE\n");
-        return 0;
 }
 
 int main()
@@ -465,55 +396,17 @@ int main()
 
     getInputs();
     updateSpaceVar();
-
     sortWordOccur();
 
-    Fill(spaceLens, wordLens, grid, 0);
-    printGrid();
+    Fill(spaceLens, wordLens);
 
-    // if (isSubset() == 0)
-    //     printf("IMPOSSIBLE\n");
-    // else if (gridFill())
-    //     printGrid();
-    // else
-    //     printf("IMPOSSIBLE\n");
+    if (isSubset() == 0)
+        printf("IMPOSSIBLE\n");
+    else if (checkGridFill())
+        printGrid();
+    else
+        printf("IMPOSSIBLE\n");
+    return 0;
 
-    //////////////////////////////////////////////////////////////////////////////
-
-    // printf("%d\n", wordCount);
-    // for (int i = 0; i < wordCount; i++)
-    // {
-    //     printf("%d ", wordLens[i]);
-    // }
-    // printf("\n");
-    // for (int i = 0; i < wordCount; i++)
-    // {
-    //     printf("%d ", wordLensOccur[i]);
-    // }
-
-    // printf("%d\n", wordCount);
-    // for (int i = 0; i < wordCount; i++)
-    // {
-    //     printf("%d ", wordLens[i]);
-    // }
-    // printf("\n%d\n", spaceCount);
-
-    // for (int i = 0; i < spaceCount; i++)
-    // {
-    //     printf("%d ", spaceLens[i]);
-    // }
-
-    //printf("\n%d", isSubset());
-
-    // printf("\n");
-    // for (int i = 0; i < spaceCount; i++)
-    // {
-    //     for (int j = 0; j < max; j++)
-    //     {
-    //         printf("(%d,%d) ", spacesCords[i][j].x, spacesCords[i][j].y);
-    //     }
-    //     printf("%d\n", spaceLens[i]);
-    // }
-    ////////////////////////////////////////////////////////////////////////////////
     return 0;
 }
