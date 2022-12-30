@@ -406,7 +406,6 @@ int main()
         printGrid();
     else
         printf("IMPOSSIBLE\n");
-    return 0;
 
     return 0;
 }
