@@ -5,7 +5,7 @@
 #define gridColFix 20
 #define wordsNum 20
 #define wordLen 10
-#define maxSpacelen 20
+#define maxSpacelen 40
 #define max ((gridRowFix > gridColFix) ? gridRowFix : gridColFix)
 int gridRow = 20;
 int gridCol = 20;
@@ -434,12 +434,14 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
         }
     }
 
+    if (!checkGridFill())
+        return 1;
+
     return 0;
 }
 
 int main()
 {
-
     getInputs();
 
     if (checkInvalidInput())
