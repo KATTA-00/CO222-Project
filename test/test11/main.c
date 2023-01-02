@@ -501,6 +501,9 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
         }
     }
 
+    if (!checkGridFill())
+        return 1;
+
     return 0;
 }
 
