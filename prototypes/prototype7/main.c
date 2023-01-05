@@ -387,6 +387,7 @@ int word2space(int n, char word[], coordinate cord[])
     */
 
     char tempGrid[gridRow][gridCol];
+
     for (int i = 0; i < gridRow; i++)
     {
         for (int j = 0; j < gridCol; j++)
@@ -465,6 +466,7 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
     char tempGrid[gridRow][gridCol];
     int temp;
     int temp1;
+
     // initalize the current node variables
     for (int i = 0; i < spaceCount; i++)
     {
