@@ -5,9 +5,9 @@
 // define the macros
 #define gridRowFix 20
 #define gridColFix 20
-#define wordsNum 20
+#define wordsNum 30
 #define wordLen 10
-#define maxSpacelen 20
+#define maxSpacelen 30
 #define max ((gridRowFix > gridColFix) ? gridRowFix : gridColFix)
 
 // define a struct to store is cell is checked
@@ -102,7 +102,7 @@ int checkInvalidInput()
 }
 
 // get the space vertically for a given cell
-void updateVertical(int x, int y, char arr[gridRow][gridCol], cellCheck cordCheck[gridRow][gridCol])
+void updateVertical(int x, int y, char arr[gridRowFix][gridColFix], cellCheck cordCheck[gridRow][gridCol])
 {
     /*
         check vertically from cell x,y for spaces and add there 
@@ -118,6 +118,7 @@ void updateVertical(int x, int y, char arr[gridRow][gridCol], cellCheck cordChec
         {
             spacesCords[spaceCount][i].x = x;
             spacesCords[spaceCount][i].y = y;
+
             cordCheck[x][y].verCheck = 0;
             i++;
         }
@@ -139,7 +140,7 @@ void updateVertical(int x, int y, char arr[gridRow][gridCol], cellCheck cordChec
 }
 
 // get the space horizontally for a given cell
-void updateHorizon(int x, int y, char arr[gridRow][gridCol], cellCheck cordCheck[gridRow][gridCol])
+void updateHorizon(int x, int y, char arr[gridRowFix][gridColFix], cellCheck cordCheck[gridRow][gridCol])
 {
     /*
         check horizontally from cell x,y for spaces and add there 
@@ -155,6 +156,7 @@ void updateHorizon(int x, int y, char arr[gridRow][gridCol], cellCheck cordCheck
         {
             spacesCords[spaceCount][i].x = x;
             spacesCords[spaceCount][i].y = y;
+
             cordCheck[x][y].horiCheck = 0;
             i++;
         }
@@ -298,7 +300,7 @@ void printGrid()
 }
 
 // function to update the word occurances
-void updateOccur(int wordLensOccur[wordCount])
+void updateOccur(int wordLensOccur[], int wordLens[])
 {
     int tempArr[wordCount];
     int count;
@@ -311,7 +313,7 @@ void updateOccur(int wordLensOccur[wordCount])
     for (int i = 0; i < wordCount; i++)
     {
         count = 0;
-        if (tempArr[i] == -1)
+        if (tempArr[i] == -2)
             continue;
 
         for (int j = 0; j < wordCount; j++)
@@ -319,7 +321,7 @@ void updateOccur(int wordLensOccur[wordCount])
             if (wordLens[i] == tempArr[j])
             {
                 count++;
-                tempArr[j] = -1;
+                tempArr[j] = -2;
             }
         }
 
@@ -351,12 +353,12 @@ void swapWords(char arr1[], char arr2[])
 }
 
 // sort the words with respect to the occurances
-void sortWordOccur()
+void sortWordOccur(int wordLens[], char words[wordsNum][wordLen])
 {
     int wordLensOccur[wordCount];
 
     // update the occurances
-    updateOccur(wordLensOccur);
+    updateOccur(wordLensOccur, wordLens);
 
     // sort the wordLens and word
     for (int i = 0; i < wordCount - 1; i++)
@@ -365,6 +367,7 @@ void sortWordOccur()
         {
             if (wordLensOccur[j] > wordLensOccur[j + 1])
             {
+
                 swapInt(&wordLensOccur[j], &wordLensOccur[j + 1]);
                 swapInt(&wordLens[j], &wordLens[j + 1]);
                 swapWords(&words[j][0], &words[j + 1][0]);
@@ -374,7 +377,7 @@ void sortWordOccur()
 }
 
 // function to place a word in a space in the grid
-int word2space(int n, char word[wordLen], coordinate cord[max])
+int word2space(int n, char word[], coordinate cord[])
 {
     /*
         this function will try to fill the give space by a given word,
@@ -496,12 +499,14 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
                         }
                     }
                 }
+
                 // if grid is filled then return 0
                 if (checkGridFill())
                     return 0;
             }
         }
-        // return 1. if the grid didn't filled
+
+        // check the grid is filled
         if (!checkGridFill())
             return 1;
     }
@@ -532,7 +537,7 @@ int main()
     }
 
     // sort the word according to occurances
-    sortWordOccur();
+    sortWordOccur(wordLens, words);
 
     // called the Fill()
     // check the puzzel is solved
