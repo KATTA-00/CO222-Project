@@ -46,6 +46,7 @@ int wordCount = 0;
 coordinate spacesCords[maxSpacelen][max];
 int spaceLens[maxSpacelen] = {0};
 int spaceCount = 0;
+int flag = 0;
 
 // check the given char that is not a '*'
 int checkCell(int x, int y, char arr[gridRowFix][gridColFix])
@@ -198,7 +199,7 @@ void updateSpaceVar()
     {
         for (int j = 0; j < gridCol; j++)
         {
-            if (checkCell(i, j, grid))
+            if (checkCell(i, j, grid) && (spaceCount < maxSpacelen))
             {
                 // if cell didn't horizontally ckecked, then check it
                 if (cordCheck[i][j].horiCheck)
@@ -432,6 +433,17 @@ int checkGridFill()
     return 1;
 }
 
+// check to -1 is in a given array
+int checkWordsAll(int arr[])
+{
+    for (int i = 0; i < wordCount; i++)
+    {
+        if (arr[i] != -1)
+            return 0;
+    }
+    return 1;
+}
+
 // main algorithm
 int Fill(int arrSpaceLens[], int arrWordLens[])
 {
@@ -441,7 +453,11 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
 
     // if grid is filled then return 0
     if (checkGridFill())
+    {
+        if (checkWordsAll(arrWordLens))
+            flag = 1;
         return 0;
+    }
 
     // define variables to store current node
     int tempSpaceLens[spaceCount];
@@ -499,10 +515,6 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
                         }
                     }
                 }
-
-                // if grid is filled then return 0
-                if (checkGridFill())
-                    return 0;
             }
         }
 
@@ -541,7 +553,7 @@ int main()
 
     // called the Fill()
     // check the puzzel is solved
-    if (!Fill(spaceLens, wordLens))
+    if (!Fill(spaceLens, wordLens) && flag)
         printGrid();
     else
         printf("IMPOSSIBLE\n");
