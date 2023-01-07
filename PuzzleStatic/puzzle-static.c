@@ -17,7 +17,7 @@
 #define wordsNum 30
 #define wordLen 10
 #define maxSpacelen 30
-#define max ((gridRowFix > gridColFix) ? gridRowFix : gridColFix)
+#define maxSpace 20
 
 // define a struct to store whether the particular cell is checked vertically and horizontally for adjacent spaces
 typedef struct _
@@ -32,10 +32,6 @@ typedef struct __
     int x;
     int y;
 } coordinate;
-
-// initalize row and col
-int gridRow = gridColFix;
-int gridCol = gridColFix;
 
 /*
     define the global variables
@@ -52,10 +48,13 @@ char grid[gridRowFix][gridColFix];
 char words[wordsNum][wordLen];
 int wordLens[wordsNum];
 int wordCount = 0;
-coordinate spacesCords[maxSpacelen][max];
+coordinate spacesCords[maxSpacelen][maxSpace];
 int spaceLens[maxSpacelen] = {0};
 int spaceCount = 0;
 int flag = 0;
+// initalize row and col
+int gridRow = gridColFix;
+int gridCol = gridColFix;
 
 // check the given char that is not a '*'
 int checkCell(int x, int y, char arr[gridRowFix][gridColFix])
@@ -228,17 +227,26 @@ void updateSpaceVar()
 }
 
 // function to get the inputs and update the variables
-void getInputs()
+int getInputs()
 {
     // get the grid from the user
     gridRow = 0;
+    int temp = 0;
     while (1)
     {
+        // get the grid row by row
         grid[gridRow][0] = '\0';
         fgets(&grid[gridRow][0], gridCol, stdin);
 
         if (strlen(&grid[gridRow][0]) == 1)
             break;
+
+        // check the row length is equal
+        // if not invalid input
+        if (gridRow == 0)
+            temp = strlen(&grid[gridRow][0]);
+        else if (temp != strlen(&grid[gridRow][0]))
+            return 1;
 
         gridRow++;
     }
@@ -259,6 +267,8 @@ void getInputs()
         wordLens[wordCount] = strlen(&words[wordCount][0]) - 1;
         wordCount++;
     }
+
+    return 0;
 }
 
 // function to check whether the word length array is a subset of space length array. Otherwise the grid is impossible to fill
@@ -560,10 +570,8 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
 int main()
 {
     // get the inputs
-    getInputs();
-
     // check there are any invalid inputs
-    if (checkInvalidInput())
+    if (getInputs() || checkInvalidInput())
     {
         printf("INVALID INPUT\n");
         return 0;
