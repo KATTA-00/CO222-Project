@@ -7,7 +7,6 @@
                         E/19/408 S.J. UBAYASIRI 
 */
 
-
 // import the libary
 #include <stdio.h>
 #include <string.h>
@@ -125,7 +124,7 @@ void updateVertical(int x, int y, char arr[gridRowFix][gridColFix], cellCheck co
     int i = 0;
     while (x < gridRow)
     {
-        if (checkCell(x, y, arr))//cell will only be checked if it is not checked before to  avoid duplicating same space coordinates
+        if (checkCell(x, y, arr)) //cell will only be checked if it is not checked before to  avoid duplicating same space coordinates
         {
             spacesCords[spaceCount][i].x = x;
             spacesCords[spaceCount][i].y = y;
@@ -138,13 +137,13 @@ void updateVertical(int x, int y, char arr[gridRowFix][gridColFix], cellCheck co
         x++;
     }
 
-    if (i != 1)//if length is greatr than 1 add the length of the space to the space length array
+    if (i != 1) //if length is greatr than 1 add the length of the space to the space length array
     {
         spaceLens[spaceCount] = i;
         spaceCount++;
     }
     else
-    {//otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
+    { //otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
         spacesCords[spaceCount][0].x = -1;
         spacesCords[spaceCount][0].y = -1;
     }
@@ -182,7 +181,7 @@ void updateHorizon(int x, int y, char arr[gridRowFix][gridColFix], cellCheck cor
         spaceCount++;
     }
     else
-    {//otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
+    { //otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
         spacesCords[spaceCount][0].x = -1;
         spacesCords[spaceCount][0].y = -1;
     }
@@ -288,7 +287,7 @@ int isSubset()
         for (int j = 0; j < spaceCount; j++)
         {
             if (wordLens[i] == arrTemp[j])
-            {   // if there is a space with length equal to word length, then flag is set to 0
+            { // if there is a space with length equal to word length, then flag is set to 0
                 flag = 0;
                 arrTemp[j] = -1;
                 break;
@@ -335,7 +334,7 @@ void updateOccur(int wordLensOccur[], int wordLens[])
             continue;
 
         for (int j = 0; j < wordCount; j++)
-        {//counting the number of words with same word length
+        { //counting the number of words with same word length
             if (wordLens[i] == tempArr[j])
             {
                 count++;
@@ -344,9 +343,9 @@ void updateOccur(int wordLensOccur[], int wordLens[])
         }
 
         for (int j = 0; j < wordCount; j++)
-        {   //managing an array of occurances of words with same length
+        { //managing an array of occurances of words with same length
             if (wordLens[j] == wordLens[i])
-            {   //in word length occurances array, i th element is the number of occurances of words with same length as i th word.
+            { //in word length occurances array, i th element is the number of occurances of words with same length as i th word.
                 //this array is used to sort the word array according to the occurances of words with same length
                 wordLensOccur[j] = count;
             }
@@ -372,7 +371,7 @@ void swapWords(char arr1[], char arr2[])
 }
 
 // sort the words with respect to the occurances
-//we start to fill the grid with word that has minimum occurances of words of the same length. 
+//we start to fill the grid with word that has minimum occurances of words of the same length.
 //That is to simplify the tree of instances of the grid
 void sortWordOccur(int wordLens[], char words[wordsNum][wordLen])
 {
@@ -417,7 +416,7 @@ int word2space(int n, char word[], coordinate cord[])
     }
 
     for (int i = 0; i < n; i++)
-    {   // fill the word
+    { // fill the word
         if (grid[cord[i].x][cord[i].y] == '#' || grid[cord[i].x][cord[i].y] == word[i])
         {
             grid[cord[i].x][cord[i].y] = word[i];
@@ -519,20 +518,20 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
                 continue;
 
             if (tempSpaceLens[i] == tempWordLens[j] && (word2space(tempSpaceLens[i], &words[j][0], &spacesCords[i][0]) == 0))
-            {   
-                // get word length and space because 
+            {
+                // get word length and space because
                 //even if the word could be filled, if there's a dead end further down on the tree, a restoring would be required
-                temp = tempSpaceLens[i];  
+                temp = tempSpaceLens[i];
                 temp1 = tempWordLens[j];
 
                 // if the word could be filled, set the word and space to -1 to indicate it is filled
-                tempSpaceLens[i] = -1; 
+                tempSpaceLens[i] = -1;
                 tempWordLens[j] = -1;
 
                 // if the word and space are filled, recursive the Fill() function
                 // go to the next node of the tree until base condition is satisfied
                 //(fill function returns 1 if base case is not satisfied)
-                // if the next word cannot be filled to the current grid, 
+                // if the next word cannot be filled to the current grid,
                 //then this conditional statement will be executed to restore the previous node
                 if (Fill(tempSpaceLens, tempWordLens))
                 {
@@ -585,7 +584,7 @@ int main()
 
     // called the Fill()
     // check the puzzel is solved
-    //Fill() return 0 if the grid is filled and flag=1 if all words are filled 
+    //Fill() return 0 if the grid is filled and flag=1 if all words are filled
     if (!Fill(spaceLens, wordLens) && flag)
         printGrid();
     else
