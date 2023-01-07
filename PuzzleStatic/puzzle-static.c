@@ -305,17 +305,19 @@ void printGrid()
     }
 }
 
-// function to update the word occurances
+// function to update the word occurances(number of words with same length)
 void updateOccur(int wordLensOccur[], int wordLens[])
 {
     int tempArr[wordCount]; // copy of the word length array
     int count;
 
+    //copying array
     for (int i = 0; i < wordCount; i++)
     {
         tempArr[i] = wordLens[i];
     }
 
+    //check whether the word is counted before
     for (int i = 0; i < wordCount; i++)
     {
         count = 0;
@@ -323,7 +325,7 @@ void updateOccur(int wordLensOccur[], int wordLens[])
             continue;
 
         for (int j = 0; j < wordCount; j++)
-        {
+        {//counting the number of words with same word length
             if (wordLens[i] == tempArr[j])
             {
                 count++;
@@ -332,9 +334,10 @@ void updateOccur(int wordLensOccur[], int wordLens[])
         }
 
         for (int j = 0; j < wordCount; j++)
-        {
+        {   //managing an array of occurances of words with same length
             if (wordLens[j] == wordLens[i])
-            {
+            {   //in word length occurances array, i th element is the number of occurances of words with same length as i th word.
+                //this array is used to sort the word array according to the occurances of words with same length
                 wordLensOccur[j] = count;
             }
         }
@@ -359,6 +362,8 @@ void swapWords(char arr1[], char arr2[])
 }
 
 // sort the words with respect to the occurances
+//we start to fill the grid with that have minimum occurances of words of the same length. 
+//That is to simplify the tree of instances of the grid
 void sortWordOccur(int wordLens[], char words[wordsNum][wordLen])
 {
     int wordLensOccur[wordCount];
