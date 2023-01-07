@@ -10,7 +10,7 @@
 #define maxSpacelen 30
 #define max ((gridRowFix > gridColFix) ? gridRowFix : gridColFix)
 
-// define a struct to store is cell is checked
+// define a struct to store whether the particular cell is checked vertically and horizontally for adjacent spaces
 typedef struct _
 {
     int horiCheck;
@@ -109,13 +109,13 @@ void updateVertical(int x, int y, char arr[gridRowFix][gridColFix], cellCheck co
         check vertically from cell x,y for spaces and add there 
         coordinates to spaceCord.
         if the length not equal to one, update the spaceLens,
-        restore the preverse state
+        restore the previous state
     */
 
     int i = 0;
     while (x < gridRow)
     {
-        if (checkCell(x, y, arr))
+        if (checkCell(x, y, arr))//cell will only be checked if it is not checked before to  avoid duplicating same space coordinates
         {
             spacesCords[spaceCount][i].x = x;
             spacesCords[spaceCount][i].y = y;
@@ -128,13 +128,13 @@ void updateVertical(int x, int y, char arr[gridRowFix][gridColFix], cellCheck co
         x++;
     }
 
-    if (i != 1)
+    if (i != 1)//if length is greatr than 1 add the length of the space to the space length array
     {
         spaceLens[spaceCount] = i;
         spaceCount++;
     }
     else
-    {
+    {//otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
         spacesCords[spaceCount][0].x = -1;
         spacesCords[spaceCount][0].y = -1;
     }
@@ -153,12 +153,12 @@ void updateHorizon(int x, int y, char arr[gridRowFix][gridColFix], cellCheck cor
     int i = 0;
     while (y < gridCol)
     {
-        if (checkCell(x, y, arr))
+        if (checkCell(x, y, arr)) //cell will only be checked if it is not checked before to  avoid duplicating same space coordinates
         {
             spacesCords[spaceCount][i].x = x;
             spacesCords[spaceCount][i].y = y;
 
-            cordCheck[x][y].horiCheck = 0;
+            cordCheck[x][y].horiCheck = 0; //cell doesn't need to be checked again
             i++;
         }
         else
@@ -166,13 +166,13 @@ void updateHorizon(int x, int y, char arr[gridRowFix][gridColFix], cellCheck cor
         y++;
     }
 
-    if (i != 1)
+    if (i != 1) //if length is greatr than 1 add the length of the space to the space length array
     {
         spaceLens[spaceCount] = i;
         spaceCount++;
     }
     else
-    {
+    {//otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
         spacesCords[spaceCount][0].x = -1;
         spacesCords[spaceCount][0].y = -1;
     }
@@ -189,6 +189,7 @@ void updateSpaceVar()
     {
         for (int j = 0; j < gridCol; j++)
         {
+            //initializing all elements to 1(initially all cells need to be checked both horizontally and vetically)
             cordCheck[i][j].horiCheck = 1;
             cordCheck[i][j].verCheck = 1;
         }
@@ -199,15 +200,15 @@ void updateSpaceVar()
     {
         for (int j = 0; j < gridCol; j++)
         {
-            if (checkCell(i, j, grid) && (spaceCount < maxSpacelen))
+            if (checkCell(i, j, grid) && (spaceCount < maxSpacelen)) //if the cell is not a * and the space count is less than the space array length
             {
-                // if cell didn't horizontally ckecked, then check it
+                // if cell didn't horizontally checked, then check it
                 if (cordCheck[i][j].horiCheck)
                 {
                     updateHorizon(i, j, grid, cordCheck);
                 }
 
-                // if cell didn't vartically ckecked, then check it
+                // if cell didn't vartically checked, then check it
                 if (cordCheck[i][j].verCheck)
                 {
                     updateVertical(i, j, grid, cordCheck);
@@ -245,19 +246,21 @@ void getInputs()
         if (strlen(&words[wordCount][0]) == 1)
             break;
 
+        //getting the worrd lengths and uupdating the word length array
         wordLens[wordCount] = strlen(&words[wordCount][0]) - 1;
         wordCount++;
     }
 }
 
-// function to check two wordLens is a subset a another SpaceLens
+// function to check whether the word length array is a subset of space length array. Otherwise the grid is impossible to fill
 int isSubset()
 {
     /*
-        this function outut 1, if the wordLens arr is a subset of
+        this function output 1, if the wordLens arr is a subset of
         spaceLens arr, else return 0
     */
 
+    // if the number of words is greater than the number of spaces, the grid is impossible to fill
     if (spaceCount < wordCount)
         return 0;
 
@@ -271,15 +274,17 @@ int isSubset()
     for (int i = 0; i < wordCount; i++)
     {
         flag = 1;
+        // check all the space length array to find a space with length equal to the i th word length
         for (int j = 0; j < spaceCount; j++)
         {
             if (wordLens[i] == arrTemp[j])
-            {
+            {   // if there is a space with length equal to word length, then flag is set to 0
                 flag = 0;
                 arrTemp[j] = -1;
                 break;
             }
         }
+        //if there is not a space that is equal to the word length, grid  is impossible
         if (flag)
             return 0;
     }
@@ -303,7 +308,7 @@ void printGrid()
 // function to update the word occurances
 void updateOccur(int wordLensOccur[], int wordLens[])
 {
-    int tempArr[wordCount];
+    int tempArr[wordCount]; // copy of the word length array
     int count;
 
     for (int i = 0; i < wordCount; i++)
