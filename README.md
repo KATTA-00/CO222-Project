@@ -1,4 +1,4 @@
-# CO222_Project
+## CO222_Project
 
 CO222-2022- Crossword Puzzle Solver 
 
