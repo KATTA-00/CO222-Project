@@ -1,3 +1,13 @@
+/*
+        CO222 - Programming methodology
+        Project - Phase 1
+        Solve the crossword puzzle using static allocation of arrays
+
+        Group members - E/19/129 K.H. GUNAWARDANA
+                        E/19/408 S.J. UBAYASIRI 
+*/
+
+
 // import the libary
 #include <stdio.h>
 #include <string.h>
@@ -521,7 +531,7 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
 
                 // if the word and space are filled, recursive the Fill() function
                 // go to the next node of the tree until base condition is satisfied
-                //(fill function returns a value if base case is not satisfied)
+                //(fill function returns 1 if base case is not satisfied)
                 // if the next word cannot be filled to the current grid, 
                 //then this conditional statement will be executed to restore the previous node
                 if (Fill(tempSpaceLens, tempWordLens))
@@ -575,6 +585,7 @@ int main()
 
     // called the Fill()
     // check the puzzel is solved
+    //Fill() return 0 if the grid is filled and flag=1 if all words are filled 
     if (!Fill(spaceLens, wordLens) && flag)
         printGrid();
     else
