@@ -362,7 +362,7 @@ void swapWords(char arr1[], char arr2[])
 }
 
 // sort the words with respect to the occurances
-//we start to fill the grid with that have minimum occurances of words of the same length. 
+//we start to fill the grid with word that has minimum occurances of words of the same length. 
 //That is to simplify the tree of instances of the grid
 void sortWordOccur(int wordLens[], char words[wordsNum][wordLen])
 {
@@ -396,7 +396,7 @@ int word2space(int n, char word[], coordinate cord[])
         else restore the grid and return 1
     */
 
-    char tempGrid[gridRow][gridCol];
+    char tempGrid[gridRow][gridCol]; //get a copy of previous state to restore if necessary
 
     for (int i = 0; i < gridRow; i++)
     {
@@ -407,7 +407,7 @@ int word2space(int n, char word[], coordinate cord[])
     }
 
     for (int i = 0; i < n; i++)
-    {
+    {   // fill the word
         if (grid[cord[i].x][cord[i].y] == '#' || grid[cord[i].x][cord[i].y] == word[i])
         {
             grid[cord[i].x][cord[i].y] = word[i];
@@ -418,7 +418,7 @@ int word2space(int n, char word[], coordinate cord[])
             {
                 for (int j = 0; j < gridCol; j++)
                 {
-                    grid[i][j] = tempGrid[i][j];
+                    grid[i][j] = tempGrid[i][j]; // restore the grid
                 }
             }
             return 1;
@@ -445,6 +445,7 @@ int checkGridFill()
 }
 
 // check to -1 is in a given array
+//to check whether all words are filled
 int checkWordsAll(int arr[])
 {
     for (int i = 0; i < wordCount; i++)
@@ -462,10 +463,10 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
         A recusive function to solve the puzzel
     */
 
-    // if grid is filled then return 0
+    // base case of the recursion. If the grid is filled then return 0
     if (checkGridFill())
     {
-        if (checkWordsAll(arrWordLens))
+        if (checkWordsAll(arrWordLens)) // if there are words left, then flag will remain 0
             flag = 1;
         return 0;
     }
@@ -478,6 +479,7 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
     int temp1;
 
     // initalize the current node variables
+    // get copies the current instances of grid, word length and space length to restore is necessary
     for (int i = 0; i < spaceCount; i++)
     {
         tempSpaceLens[i] = arrSpaceLens[i];
@@ -497,26 +499,34 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
     // iterate each word in the word arr
     for (int j = 0; j < wordCount; j++)
     {
-        if (tempWordLens[j] == -1)
+        if (tempWordLens[j] == -1) // if the word is filled, j th element is -1
             continue;
 
         // iterate each space in the space arr
         for (int i = 0; i < spaceCount; i++)
         {
-            if (tempSpaceLens[i] == -1)
+            if (tempSpaceLens[i] == -1) // if the i space is filled with a word, i the element is -1
                 continue;
 
             if (tempSpaceLens[i] == tempWordLens[j] && (word2space(tempSpaceLens[i], &words[j][0], &spacesCords[i][0]) == 0))
-            {
-                temp = tempSpaceLens[i];
+            {   
+                // get word length and space because 
+                //even if the word could be filled, if there's a dead end further down on the tree, a restoring would be required
+                temp = tempSpaceLens[i];  
                 temp1 = tempWordLens[j];
-                tempSpaceLens[i] = -1;
+
+                // if the word could be filled, set the word and space to -1 to indicate it is filled
+                tempSpaceLens[i] = -1; 
                 tempWordLens[j] = -1;
 
                 // if the word and space are filled, recursive the Fill() function
+                // go to the next node of the tree until base condition is satisfied
+                //(fill function returns a value if base case is not satisfied)
+                // if the next word cannot be filled to the current grid, 
+                //then this conditional statement will be executed to restore the previous node
                 if (Fill(tempSpaceLens, tempWordLens))
                 {
-                    // if the word and space don't match, restore the previese node
+                    // if the word and space don't match, restore the previous node
                     tempSpaceLens[i] = temp;
                     tempWordLens[j] = temp1;
                     for (int p = 0; p < gridRow; p++)
