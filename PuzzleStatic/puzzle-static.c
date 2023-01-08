@@ -102,8 +102,9 @@ int checkInvalidInput()
         {
             if (!isAplha(words[i][j]))
                 return 1;
-            else
-                words[i][j] = (('a' <= words[i][j]) && ('z' >= words[i][j])) ? (words[i][j] - 'a' + 'A') : words[i][j];
+            // capitalize rule for the words
+            // else
+            //     words[i][j] = (('a' <= words[i][j]) && ('z' >= words[i][j])) ? (words[i][j] - 'a' + 'A') : words[i][j];
         }
     }
 
@@ -353,11 +354,11 @@ void updateOccur(int wordLensOccur[], int wordLens[])
         }
 
         for (int j = 0; j < wordCount; j++)
-        {   
+        {
             //managing an array of occurances of words with same length
             if (wordLens[j] == wordLens[i])
 
-            { 
+            {
                 //in word length occurances array, i th element is the number of occurances of words with same length as i th word.
                 //this array is used to sort the word array according to the occurances of words with same length
                 wordLensOccur[j] = count;
@@ -570,6 +571,7 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
     return 0;
 }
 
+// main function
 int main()
 {
     // get the inputs
