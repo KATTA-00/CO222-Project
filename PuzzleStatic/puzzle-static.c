@@ -3,6 +3,8 @@
         Project - Phase 1
         Solve the crossword puzzle using static allocation of arrays
 
+        Group-31
+
         Group members - E/19/129 K.H. GUNAWARDANA
                         E/19/408 S.J. UBAYASIRI 
 */
