@@ -15,12 +15,8 @@
 #include <stdlib.h>
 
 // define the macros
-#define gridRowFix 20
-#define gridColFix 20
-#define wordsNum 30
-#define wordLen 10
-#define maxSpacelen 30
-#define maxSpace 20
+#define maxRowLen 30
+#define maxWordLen 20
 
 // define a struct to store whether the particular cell is checked vertically and horizontally for adjacent spaces
 typedef struct _
@@ -47,17 +43,17 @@ typedef struct __
         spaceCount - count of spaces
 
 */
-char **grid;
-char **words;
-int *wordLens;
+char **grid = NULL;
+char **words = NULL;
+int *wordLens = NULL;
 int wordCount = 0;
-coordinate spacesCords[maxSpacelen][maxSpace];
-int spaceLens[maxSpacelen] = {0};
+coordinate **spacesCords = NULL;
+int *spaceLens = NULL;
 int spaceCount = 0;
-int flag = 0;
+int wordsFilled = 0;
 // initalize row and col
-int gridRow = gridColFix;
-int gridCol = gridColFix;
+int gridRow = 0;
+int gridCol = 0;
 
 // check the given char that is not a '*'
 int checkCell(int x, int y, char **arr)
@@ -115,7 +111,7 @@ int checkInvalidInput()
 }
 
 // get the space vertically for a given cell
-void updateVertical(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridCol])
+void updateVertical(int x, int y, char **arr, cellCheck **cordCheck)
 {
     /*
         check vertically from cell x,y for spaces and add there
@@ -124,11 +120,18 @@ void updateVertical(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridC
         restore the previous state
     */
 
+    // re-allocate the spaceCord variable
+    spacesCords = (coordinate **)realloc(spacesCords, sizeof(coordinate *) * (spaceCount + 1));
+    spacesCords[spaceCount] = NULL;
+
     int i = 0;
     while (x < gridRow)
     {
         if (checkCell(x, y, arr)) //cell will only be checked if it is not checked before to  avoid duplicating same space coordinates
         {
+            // re-allocate the variable
+            spacesCords[spaceCount] = (coordinate *)realloc(spacesCords[spaceCount], sizeof(coordinate) * (i + 1));
+
             spacesCords[spaceCount][i].x = x;
             spacesCords[spaceCount][i].y = y;
 
@@ -142,18 +145,19 @@ void updateVertical(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridC
 
     if (i != 1) //if length is greatr than 1 add the length of the space to the space length array
     {
+        // re-allocate the variable
+        spaceLens = (int *)realloc(spaceLens, sizeof(int) * (spaceCount + 1));
         spaceLens[spaceCount] = i;
         spaceCount++;
     }
     else
     { //otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
-        spacesCords[spaceCount][0].x = -1;
-        spacesCords[spaceCount][0].y = -1;
+        spacesCords = (coordinate **)realloc(spacesCords, sizeof(coordinate *) * (spaceCount));
     }
 }
 
 // get the space horizontally for a given cell
-void updateHorizon(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridCol])
+void updateHorizon(int x, int y, char **arr, cellCheck **cordCheck)
 {
     /*
         check horizontally from cell x,y for spaces and add there
@@ -162,11 +166,18 @@ void updateHorizon(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridCo
         restore the preverse state
     */
 
+    // re-allocate the spaceCord variable
+    spacesCords = (coordinate **)realloc(spacesCords, sizeof(coordinate *) * (spaceCount + 1));
+    spacesCords[spaceCount] = NULL;
+
     int i = 0;
     while (y < gridCol)
     {
         if (checkCell(x, y, arr)) //cell will only be checked if it is not checked before to  avoid duplicating same space coordinates
         {
+            // re-allocate the variable
+            spacesCords[spaceCount] = (coordinate *)realloc(spacesCords[spaceCount], sizeof(coordinate) * (i + 1));
+
             spacesCords[spaceCount][i].x = x;
             spacesCords[spaceCount][i].y = y;
 
@@ -180,13 +191,14 @@ void updateHorizon(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridCo
 
     if (i != 1) //if length is greatr than 1 add the length of the space to the space length array
     {
+        // re-allocate the variable
+        spaceLens = (int *)realloc(spaceLens, sizeof(int) * (spaceCount + 1));
         spaceLens[spaceCount] = i;
         spaceCount++;
     }
     else
     { //otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
-        spacesCords[spaceCount][0].x = -1;
-        spacesCords[spaceCount][0].y = -1;
+        spacesCords = (coordinate **)realloc(spacesCords, sizeof(coordinate *) * (spaceCount));
     }
 }
 
@@ -194,7 +206,11 @@ void updateHorizon(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridCo
 void updateSpaceVar()
 {
     // define the coordinate check arr
-    cellCheck cordCheck[gridRow][gridCol];
+    cellCheck **cordCheck = (cellCheck **)malloc(sizeof(cellCheck *) * gridRow);
+    for (int i = 0; i < gridRow; i++)
+    {
+        cordCheck[i] = (cellCheck *)malloc(sizeof(cellCheck) * gridCol);
+    }
 
     // initialize the cordCheck arr
     for (int i = 0; i < gridRow; i++)
@@ -212,7 +228,7 @@ void updateSpaceVar()
     {
         for (int j = 0; j < gridCol; j++)
         {
-            if (checkCell(i, j, grid) && (spaceCount < maxSpacelen)) //if the cell is not a * and the space count is less than the space array length
+            if (checkCell(i, j, grid)) //if the cell is not a * and the space count is less than the space array length
             {
                 // if cell didn't horizontally checked, then check it
                 if (cordCheck[i][j].horiCheck)
@@ -228,6 +244,13 @@ void updateSpaceVar()
             }
         }
     }
+
+    // free the var
+    for (int i = 0; i < gridRow; i++)
+    {
+        free(cordCheck[i]);
+    }
+    free(cordCheck);
 }
 
 // function to print the grid
@@ -250,20 +273,15 @@ int getInputs()
     gridRow = 0;
     int temp = 0;
 
-    grid = NULL;
-
     while (1)
     {
+        // re-allocate the grid variable for next row
         grid = (char **)realloc(grid, sizeof(char *) * (gridRow + 1));
-        grid[gridRow] = NULL;
-        for (int i = 0; i < gridRow + 1; i++)
-        {
-            grid[i] = (char *)realloc(grid[i], sizeof(char) * gridColFix);
-        }
+        grid[gridRow] = (char *)malloc(sizeof(char) * maxRowLen);
 
         // get the grid row by row
         grid[gridRow][0] = '\0';
-        fgets(grid[gridRow], gridCol, stdin);
+        fgets(grid[gridRow], maxRowLen, stdin);
 
         if (strlen(grid[gridRow]) == 1)
             break;
@@ -275,51 +293,39 @@ int getInputs()
         else if (temp != strlen(grid[gridRow]))
             return 1;
 
+        grid[gridRow] = (char *)realloc(grid[gridRow], sizeof(char) * (strlen(grid[0]) - 1));
         gridRow++;
     }
 
     // get the number of cols
     gridCol = strlen(grid[0]) - 1;
 
+    // re-allocate the grid without garbage values
     grid = (char **)realloc(grid, sizeof(char *) * (gridRow));
-    for (int i = 0; i < gridRow; i++)
-    {
-        grid[i] = (char *)realloc(grid[i], sizeof(char) * gridCol);
-    }
-
-    words = NULL;
-    wordLens = NULL;
 
     // get the words from user
-    while (wordCount < wordsNum)
+    while (1)
     {
-        wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount + 1));
+        // re-allocate the words variable
         words = (char **)realloc(words, sizeof(char *) * (wordCount + 1));
-        words[wordCount] = NULL;
-
-        for (int i = 0; i < wordCount + 1; i++)
-        {
-            words[i] = (char *)realloc(words[i], sizeof(char) * wordLen);
-        }
+        words[wordCount] = (char *)malloc(sizeof(char) * maxWordLen);
 
         words[wordCount][0] = '\0';
-        fgets(words[wordCount], wordLen, stdin);
+        fgets(words[wordCount], maxWordLen, stdin);
 
         if (strlen(words[wordCount]) == 1)
             break;
 
         //getting the worrd lengths and uupdating the word length array
+        wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount + 1));
         wordLens[wordCount] = strlen(words[wordCount]) - 1;
+
+        words[wordCount] = (char *)realloc(words[wordCount], sizeof(char) * (strlen(words[wordCount]) + 1));
         wordCount++;
     }
 
+    // re-allocate the words variable without garbage values
     words = (char **)realloc(words, sizeof(char *) * wordCount);
-    for (int i = 0; i < wordCount; i++)
-    {
-        words[i] = (char *)realloc(words[i], sizeof(char) * (wordLens[i] + 2));
-    }
-
-    wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount));
 
     return 0;
 }
@@ -365,7 +371,7 @@ int isSubset()
 }
 
 // function to update the word occurances(number of words with same length)
-void updateOccur(int wordLensOccur[], int *wordLens)
+void updateOccur(int *wordLensOccur, int *wordLens)
 {
     int tempArr[wordCount]; // copy of the word length array
     int count;
@@ -417,14 +423,14 @@ void swapInt(int *xp, int *yp)
 // function to swap two string variable
 void swapWords(char arr1[], char arr2[])
 {
-    char temp[wordLen];
+    char temp[maxWordLen];
     strcpy(temp, arr1);
     strcpy(arr1, arr2);
     strcpy(arr2, temp);
 }
 
 // sort the words with respect to the occurances
-//we start to fill the grid with word that has minimum occurances of words of the same length.
+// we start to fill the grid with word that has minimum occurances of words of the same length.
 //That is to simplify the tree of instances of the grid
 void sortWordOccur(int *wordLens, char **words)
 {
@@ -450,7 +456,7 @@ void sortWordOccur(int *wordLens, char **words)
 }
 
 // function to place a word in a space in the grid
-int word2space(int n, char word[], coordinate cord[])
+int word2space(int n, char *word, coordinate *cord)
 {
     /*
         this function will try to fill the give space by a given word,
@@ -529,7 +535,7 @@ int Fill(int *arrSpaceLens, int *arrWordLens)
     if (checkGridFill())
     {
         if (checkWordsAll(arrWordLens)) // if there are words left, then flag will remain 0
-            flag = 1;
+            wordsFilled = 1;
         return 0;
     }
 
@@ -610,24 +616,33 @@ int Fill(int *arrSpaceLens, int *arrWordLens)
     return 0;
 }
 
+// function to free the dynamic arrays
 void freeVar()
 {
-
+    // free grid
     for (int i = 0; i < gridRow; i++)
     {
         free(grid[i]);
     }
-
     free(grid);
 
+    // free words
     for (int i = 0; i < wordCount; i++)
     {
         free(words[i]);
     }
-
     free(words);
-
+    // free wordLens
     free(wordLens);
+
+    // free spaceCords
+    for (int i = 0; i < spaceCount; i++)
+    {
+        free(spacesCords[i]);
+    }
+    free(spacesCords);
+    // free spaceLens
+    free(spaceLens);
 }
 
 // main function
@@ -658,11 +673,12 @@ int main()
     // called the Fill()
     // check the whether puzzel is solved
     //Fill() return 0 if the grid is filled and flag=1 if all words are filled
-    if (!Fill(spaceLens, wordLens) && flag)
+    if (!Fill(spaceLens, wordLens) && wordsFilled)
         printGrid();
     else
         printf("IMPOSSIBLE\n");
 
+    // free the var
     freeVar();
 
     return 0;
