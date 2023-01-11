@@ -256,7 +256,6 @@ int getInputs()
     {
         grid = (char **)realloc(grid, sizeof(char *) * (gridRow + 1));
         grid[gridRow] = NULL;
-
         for (int i = 0; i < gridRow + 1; i++)
         {
             grid[i] = (char *)realloc(grid[i], sizeof(char) * gridColFix);
@@ -295,7 +294,6 @@ int getInputs()
     while (wordCount < wordsNum)
     {
         wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount + 1));
-
         words = (char **)realloc(words, sizeof(char *) * (wordCount + 1));
         words[wordCount] = NULL;
 
