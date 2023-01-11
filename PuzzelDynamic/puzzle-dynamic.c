@@ -12,6 +12,7 @@
 // import the libary
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 // define the macros
 #define gridRowFix 20
@@ -46,9 +47,9 @@ typedef struct __
         spaceCount - count of spaces
 
 */
-char grid[gridRowFix][gridColFix];
-char words[wordsNum][wordLen];
-int wordLens[wordsNum];
+char **grid;
+char **words;
+int *wordLens;
 int wordCount = 0;
 coordinate spacesCords[maxSpacelen][maxSpace];
 int spaceLens[maxSpacelen] = {0};
@@ -59,7 +60,7 @@ int gridRow = gridColFix;
 int gridCol = gridColFix;
 
 // check the given char that is not a '*'
-int checkCell(int x, int y, char arr[gridRowFix][gridColFix])
+int checkCell(int x, int y, char **arr)
 {
     if (arr[x][y] != '*')
         return 1;
@@ -105,8 +106,8 @@ int checkInvalidInput()
             if (!isAplha(words[i][j]))
                 return 1;
             // capitalize rule for the words
-            // else
-            //     words[i][j] = (('a' <= words[i][j]) && ('z' >= words[i][j])) ? (words[i][j] - 'a' + 'A') : words[i][j];
+            else
+                words[i][j] = (('a' <= words[i][j]) && ('z' >= words[i][j])) ? (words[i][j] - 'a' + 'A') : words[i][j];
         }
     }
 
@@ -114,10 +115,10 @@ int checkInvalidInput()
 }
 
 // get the space vertically for a given cell
-void updateVertical(int x, int y, char arr[gridRowFix][gridColFix], cellCheck cordCheck[gridRow][gridCol])
+void updateVertical(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridCol])
 {
     /*
-        check vertically from cell x,y for spaces and add there 
+        check vertically from cell x,y for spaces and add there
         coordinates to spaceCord.
         if the length not equal to one, update the spaceLens,
         restore the previous state
@@ -152,10 +153,10 @@ void updateVertical(int x, int y, char arr[gridRowFix][gridColFix], cellCheck co
 }
 
 // get the space horizontally for a given cell
-void updateHorizon(int x, int y, char arr[gridRowFix][gridColFix], cellCheck cordCheck[gridRow][gridCol])
+void updateHorizon(int x, int y, char **arr, cellCheck cordCheck[gridRow][gridCol])
 {
     /*
-        check horizontally from cell x,y for spaces and add there 
+        check horizontally from cell x,y for spaces and add there
         coordinates to spaceCord.
         if the length not equal to one, update the spaceLens,
         restore the preverse state
@@ -229,47 +230,98 @@ void updateSpaceVar()
     }
 }
 
+// function to print the grid
+void printGrid()
+{
+    for (int i = 0; i < gridRow; i++)
+    {
+        for (int j = 0; j < gridCol; j++)
+        {
+            printf("%c", grid[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 // function to get the inputs and update the variables
 int getInputs()
 {
     // get the grid from the user
     gridRow = 0;
     int temp = 0;
+
+    grid = NULL;
+
     while (1)
     {
+        grid = (char **)realloc(grid, sizeof(char *) * (gridRow + 1));
+        grid[gridRow] = NULL;
+
+        for (int i = 0; i < gridRow + 1; i++)
+        {
+            grid[i] = (char *)realloc(grid[i], sizeof(char) * gridColFix);
+        }
+
         // get the grid row by row
         grid[gridRow][0] = '\0';
-        fgets(&grid[gridRow][0], gridCol, stdin);
+        fgets(grid[gridRow], gridCol, stdin);
 
-        if (strlen(&grid[gridRow][0]) == 1)
+        if (strlen(grid[gridRow]) == 1)
             break;
 
         // check the row length is equal
         // if not invalid input
         if (gridRow == 0)
-            temp = strlen(&grid[gridRow][0]);
-        else if (temp != strlen(&grid[gridRow][0]))
+            temp = strlen(grid[gridRow]);
+        else if (temp != strlen(grid[gridRow]))
             return 1;
 
         gridRow++;
     }
 
     // get the number of cols
-    gridCol = strlen(&grid[0][0]) - 1;
+    gridCol = strlen(grid[0]) - 1;
+
+    grid = (char **)realloc(grid, sizeof(char *) * (gridRow));
+    for (int i = 0; i < gridRow; i++)
+    {
+        grid[i] = (char *)realloc(grid[i], sizeof(char) * gridCol);
+    }
+
+    words = NULL;
+    wordLens = NULL;
 
     // get the words from user
     while (wordCount < wordsNum)
     {
-        words[wordCount][0] = '\0';
-        fgets(&words[wordCount][0], wordLen, stdin);
+        wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount + 1));
 
-        if (strlen(&words[wordCount][0]) == 1)
+        words = (char **)realloc(words, sizeof(char *) * (wordCount + 1));
+        words[wordCount] = NULL;
+
+        for (int i = 0; i < wordCount + 1; i++)
+        {
+            words[i] = (char *)realloc(words[i], sizeof(char) * wordLen);
+        }
+
+        words[wordCount][0] = '\0';
+        fgets(words[wordCount], wordLen, stdin);
+
+        if (strlen(words[wordCount]) == 1)
             break;
 
         //getting the worrd lengths and uupdating the word length array
-        wordLens[wordCount] = strlen(&words[wordCount][0]) - 1;
+        wordLens[wordCount] = strlen(words[wordCount]) - 1;
         wordCount++;
     }
+
+    words = (char **)realloc(words, sizeof(char *) * wordCount);
+    for (int i = 0; i < wordCount; i++)
+    {
+        words[i] = (char *)realloc(words[i], sizeof(char) * (wordLens[i] + 2));
+    }
+
+    wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount));
 
     return 0;
 }
@@ -314,21 +366,8 @@ int isSubset()
     return 1;
 }
 
-// function to print the grid
-void printGrid()
-{
-    for (int i = 0; i < gridRow; i++)
-    {
-        for (int j = 0; j < gridCol; j++)
-        {
-            printf("%c", grid[i][j]);
-        }
-        printf("\n");
-    }
-}
-
 // function to update the word occurances(number of words with same length)
-void updateOccur(int wordLensOccur[], int wordLens[])
+void updateOccur(int wordLensOccur[], int *wordLens)
 {
     int tempArr[wordCount]; // copy of the word length array
     int count;
@@ -389,7 +428,7 @@ void swapWords(char arr1[], char arr2[])
 // sort the words with respect to the occurances
 //we start to fill the grid with word that has minimum occurances of words of the same length.
 //That is to simplify the tree of instances of the grid
-void sortWordOccur(int wordLens[], char words[wordsNum][wordLen])
+void sortWordOccur(int *wordLens, char **words)
 {
     int wordLensOccur[wordCount];
 
@@ -406,7 +445,7 @@ void sortWordOccur(int wordLens[], char words[wordsNum][wordLen])
 
                 swapInt(&wordLensOccur[j], &wordLensOccur[j + 1]);
                 swapInt(&wordLens[j], &wordLens[j + 1]);
-                swapWords(&words[j][0], &words[j + 1][0]);
+                swapWords(words[j], words[j + 1]);
             }
         }
     }
@@ -482,7 +521,7 @@ int checkWordsAll(int arr[])
 }
 
 // main algorithm
-int Fill(int arrSpaceLens[], int arrWordLens[])
+int Fill(int *arrSpaceLens, int arrWordLens[])
 {
     /*
         A recusive function to solve the puzzel
@@ -573,9 +612,30 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
     return 0;
 }
 
+void freeVar()
+{
+
+    for (int i = 0; i < gridRow; i++)
+    {
+        free(grid[i]);
+    }
+
+    free(grid);
+
+    for (int i = 0; i < wordCount; i++)
+    {
+        free(words[i]);
+    }
+
+    free(words);
+
+    free(wordLens);
+}
+
 // main function
 int main()
 {
+
     // get the inputs
     // check there are any invalid inputs
     if (getInputs() || checkInvalidInput())
@@ -604,6 +664,8 @@ int main()
         printGrid();
     else
         printf("IMPOSSIBLE\n");
+
+    freeVar();
 
     return 0;
 }
