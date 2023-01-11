@@ -519,7 +519,7 @@ int checkWordsAll(int arr[])
 }
 
 // main algorithm
-int Fill(int *arrSpaceLens, int arrWordLens[])
+int Fill(int *arrSpaceLens, int *arrWordLens)
 {
     /*
         A recusive function to solve the puzzel
