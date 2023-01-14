@@ -102,8 +102,8 @@ int checkInvalidInput()
             if (!isAplha(words[i][j]))
                 return 1;
             // capitalize rule for the words
-            else
-                words[i][j] = (('a' <= words[i][j]) && ('z' >= words[i][j])) ? (words[i][j] - 'a' + 'A') : words[i][j];
+            // else
+            //     words[i][j] = (('a' <= words[i][j]) && ('z' >= words[i][j])) ? (words[i][j] - 'a' + 'A') : words[i][j];
         }
     }
 
