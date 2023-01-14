@@ -152,6 +152,7 @@ void updateVertical(int x, int y, char **arr, cellCheck **cordCheck)
     }
     else
     { //otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
+        free(spacesCords[spaceCount]);
         spacesCords = (coordinate **)realloc(spacesCords, sizeof(coordinate *) * (spaceCount));
     }
 }
@@ -198,6 +199,7 @@ void updateHorizon(int x, int y, char **arr, cellCheck **cordCheck)
     }
     else
     { //otherwise restoring the space coordinate array to the previous state because space with length 1 is not a valid space
+        free(spacesCords[spaceCount]);
         spacesCords = (coordinate **)realloc(spacesCords, sizeof(coordinate *) * (spaceCount));
     }
 }
@@ -301,6 +303,7 @@ int getInputs()
     gridCol = strlen(grid[0]) - 1;
 
     // re-allocate the grid without garbage values
+    free(grid[gridRow]);
     grid = (char **)realloc(grid, sizeof(char *) * (gridRow));
 
     // get the words from user
@@ -325,6 +328,7 @@ int getInputs()
     }
 
     // re-allocate the words variable without garbage values
+    free(words[wordCount]);
     words = (char **)realloc(words, sizeof(char *) * wordCount);
 
     return 0;
