@@ -295,6 +295,7 @@ int getInputs()
         else if (temp != strlen(grid[gridRow]))
             return 1;
 
+        // reallocate the memory
         grid[gridRow] = (char *)realloc(grid[gridRow], sizeof(char) * (strlen(grid[0]) + 1));
         gridRow++;
     }
@@ -323,6 +324,7 @@ int getInputs()
         wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount + 1));
         wordLens[wordCount] = strlen(words[wordCount]) - 1;
 
+        // reallocate the memory
         words[wordCount] = (char *)realloc(words[wordCount], sizeof(char) * (strlen(words[wordCount]) + 1));
         wordCount++;
     }
