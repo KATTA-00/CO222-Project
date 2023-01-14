@@ -295,7 +295,7 @@ int getInputs()
         else if (temp != strlen(grid[gridRow]))
             return 1;
 
-        grid[gridRow] = (char *)realloc(grid[gridRow], sizeof(char) * (strlen(grid[0]) - 1));
+        grid[gridRow] = (char *)realloc(grid[gridRow], sizeof(char) * (strlen(grid[0]) + 1));
         gridRow++;
     }
 
