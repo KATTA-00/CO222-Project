@@ -327,6 +327,8 @@ int getInputs()
         wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount + 1));
         wordLens[wordCount] = strlen(words[wordCount]) - 1;
 
+        // reallocate the memory
+        words[wordCount] = (char *)realloc(words[wordCount], sizeof(char) * (strlen(words[wordCount]) + 10));
         wordCount++;
     }
 
@@ -427,15 +429,6 @@ void swapInt(int *xp, int *yp)
     *yp = temp;
 }
 
-// function to swap two string variable
-void swapWords(char arr1[], char arr2[])
-{
-    char temp[maxWordLen];
-    strcpy(temp, arr1);
-    strcpy(arr1, arr2);
-    strcpy(arr2, temp);
-}
-
 // sort the words with respect to the occurances
 // we start to fill the grid with word that has minimum occurances of words of the same length.
 //That is to simplify the tree of instances of the grid
@@ -446,6 +439,7 @@ void sortWordOccur(int *wordLens, char **words)
     // update the occurances
     updateOccur(wordLensOccur, wordLens);
 
+    char *temp;
     // sort the wordLens and word
     for (int i = 0; i < wordCount - 1; i++)
     {
@@ -456,7 +450,9 @@ void sortWordOccur(int *wordLens, char **words)
 
                 swapInt(&wordLensOccur[j], &wordLensOccur[j + 1]);
                 swapInt(&wordLens[j], &wordLens[j + 1]);
-                swapWords(words[j], words[j + 1]);
+                temp = words[j];
+                words[j] = words[j + 1];
+                words[j + 1] = temp;
             }
         }
     }
