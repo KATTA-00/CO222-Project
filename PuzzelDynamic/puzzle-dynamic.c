@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 // define the macros
-#define maxRowLen 50
+#define maxRowLen 20
 #define maxWordLen 20
 
 // define a struct to store whether the particular cell is checked vertically and horizontally for adjacent spaces
