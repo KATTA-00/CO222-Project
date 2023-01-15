@@ -16,7 +16,7 @@
 
 // define the macros
 #define maxRowLen 50
-#define maxWordLen 50
+#define maxWordLen 20
 
 // define a struct to store whether the particular cell is checked vertically and horizontally for adjacent spaces
 typedef struct _
@@ -296,8 +296,6 @@ int getInputs()
         else if (temp != strlen(grid[gridRow]))
             return 1;
 
-        // reallocate the memory
-        grid[gridRow] = (char *)realloc(grid[gridRow], sizeof(char) * (strlen(grid[0]) + 1));
         gridRow++;
     }
 
@@ -327,8 +325,6 @@ int getInputs()
         wordLens = (int *)realloc(wordLens, sizeof(int) * (wordCount + 1));
         wordLens[wordCount] = strlen(words[wordCount]) - 1;
 
-        // reallocate the memory
-        words[wordCount] = (char *)realloc(words[wordCount], sizeof(char) * (strlen(words[wordCount]) + 10));
         wordCount++;
     }
 
