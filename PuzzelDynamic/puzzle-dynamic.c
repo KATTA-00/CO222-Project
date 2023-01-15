@@ -285,6 +285,7 @@ int getInputs()
         grid[gridRow][0] = '\0';
         fgets(grid[gridRow], maxRowLen, stdin);
 
+        // if next line is is blanck end the loop
         if (strlen(grid[gridRow]) == 1)
             break;
 
@@ -314,9 +315,11 @@ int getInputs()
         words = (char **)realloc(words, sizeof(char *) * (wordCount + 1));
         words[wordCount] = (char *)malloc(sizeof(char) * maxWordLen);
 
+        // get the next word
         words[wordCount][0] = '\0';
         fgets(words[wordCount], maxWordLen, stdin);
 
+        // if next line is is blanck end the loop
         if (strlen(words[wordCount]) == 1)
             break;
 
