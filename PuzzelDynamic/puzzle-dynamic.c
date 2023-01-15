@@ -328,7 +328,7 @@ int getInputs()
         wordLens[wordCount] = strlen(words[wordCount]) - 1;
 
         // reallocate the memory
-        words[wordCount] = (char *)realloc(words[wordCount], sizeof(char) * (strlen(words[wordCount]) + 1));
+        words[wordCount] = (char *)realloc(words[wordCount], sizeof(char) * (strlen(words[wordCount]) + 5));
         wordCount++;
     }
 
