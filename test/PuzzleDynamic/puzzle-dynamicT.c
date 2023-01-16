@@ -652,6 +652,7 @@ void freeVar()
 // main function
 int main()
 {
+    printf("\n");
     clock_t t;
     t = clock();
 
@@ -689,7 +690,7 @@ int main()
 
     t = clock() - t;
     double time_taken = ((double)t) / CLOCKS_PER_SEC; // in seconds
-    printf("\nTime - %f(seconds)\n\n", time_taken);
+    printf("Time - %f(seconds)\n\n", time_taken);
 
     return 0;
 }
