@@ -576,7 +576,6 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
 // main function
 int main()
 {
-    printf("\nOuput >>> \n");
     // get the inputs
     // check there are any invalid inputs
     if (getInputs() || checkInvalidInput())

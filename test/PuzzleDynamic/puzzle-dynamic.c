@@ -651,7 +651,6 @@ void freeVar()
 // main function
 int main()
 {
-    printf("\nOuput >>> \n");
     // get the inputs
     // check there are any invalid inputs
     if (getInputs() || checkInvalidInput())
