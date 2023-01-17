@@ -33,6 +33,7 @@ The completed puzzle, the message “IMPOSSIBLE” or “INVALID INPUT”
 ### PuzzelSatic
 * Contain the code which uses the dynamic allocation
 ### test
+* Only for linux/Ubuntu systems
 * Contains a program to test the code
 * There are 3 testcases and we can get the memory details and time details about each testcase
 * Read the readme file
