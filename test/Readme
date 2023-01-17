@@ -1,8 +1,7 @@
-#Test the code for TestCases
+Test the code for TestCases
+Do the instructon given below
 
-##Do the instructon given below
-
-1). compile a program 
+1). compile the program
             >> make 
 2). memory details 
             >> make memtest
