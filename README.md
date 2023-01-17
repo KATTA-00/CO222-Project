@@ -23,7 +23,7 @@ line is provided.
 #### Output:
 The completed puzzle, the message “IMPOSSIBLE” or “INVALID INPUT”
 
-###Files
+### Files
 * PuzzleStatic
 * PuzzleDynamic
 * test
