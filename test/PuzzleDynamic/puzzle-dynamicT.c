@@ -652,7 +652,7 @@ void freeVar()
 // main function
 int main()
 {
-    printf("\n");
+    printf("\nOuput >>> \n");
     clock_t t;
     t = clock();
 

@@ -577,7 +577,7 @@ int Fill(int arrSpaceLens[], int arrWordLens[])
 // main function
 int main()
 {
-    printf("\n");
+    printf("\nOuput >>> \n");
     clock_t t;
     t = clock();
 
