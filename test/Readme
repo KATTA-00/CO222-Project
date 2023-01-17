@@ -1,3 +1,10 @@
-1). run - make 
-2). make memtest - for memory 
-3). make timetest - for time
+#Test the code for TestCases
+
+##Do the instructon given below
+
+1). compile a program 
+            >> make 
+2). memory details 
+            >> make memtest
+3). time details
+            >> make timetest
