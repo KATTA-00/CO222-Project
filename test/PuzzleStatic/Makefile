@@ -4,6 +4,8 @@ mainM:puzzle-static.c
 	gcc -Wall -g -o mainM puzzle-static.c
 mainT:puzzle-staticT.c
 	gcc -Wall -g -o mainT puzzle-staticT.c
+install:
+	sudo apt-get install valgrind
 memtest:
 	valgrind ./mainM < test0 
 	memusage ./mainM < test0

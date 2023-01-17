@@ -1,9 +1,11 @@
-all: mainT mainM
+all: mainT mainM 
 	
 mainM:puzzle-dynamic.c
 	gcc -Wall -g -o mainM puzzle-dynamic.c
 mainT:puzzle-dynamicT.c
 	gcc -Wall -g -o mainT puzzle-dynamicT.c
+install:
+	sudo apt-get install valgrind
 memtest:
 	valgrind ./mainM < test0 
 	memusage ./mainM < test0

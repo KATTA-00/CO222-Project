@@ -1,13 +1,16 @@
 Test the code for TestCases
 Do the instructon given below
+Only for linux/Ubuntu systems
 
 1). got to the PuzzleStatic or PuzzleDynamic directory
             >> cd PuzzleStatic
             or
             >> cd PuzzleDynamic
-2). compile the program
+2). if your Pc did't have valgrind
+            >> make install
+3). compile the program
             >> make 
-3). memory details 
+4). memory details 
             >> make memtest
-4). time details
+5). time details
             >> make timetest
