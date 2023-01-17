@@ -23,7 +23,16 @@ line is provided.
 #### Output:
 The completed puzzle, the message “IMPOSSIBLE” or “INVALID INPUT”
 
-### Files
+## Files
 * PuzzleStatic
 * PuzzleDynamic
 * test
+
+### PuzzelSatic
+* contain the code which uses the static allocation
+### PuzzelSatic
+* contain the code which uses the static allocation
+### test
+* contains program to test the code
+* There are 3 testcases and we can get the memory details and time details about each testcase
+* Read the readme file
