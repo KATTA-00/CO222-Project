@@ -7,7 +7,7 @@ mainT:puzzle-dynamicT.c
 memtest:
 	valgrind ./mainM < test0 
 	memusage ./mainM < test0
-	valgrind ./mainM	< test1
+	valgrind ./mainM < test1
 	memusage ./mainM < test1
 	valgrind ./mainM < test2
 	memusage ./mainM < test2
