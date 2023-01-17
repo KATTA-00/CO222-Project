@@ -651,7 +651,6 @@ void freeVar()
 // main function
 int main()
 {
-    printf("\nOuput >>> \n");
 
     // get the inputs
     // check there are any invalid inputs
@@ -684,8 +683,6 @@ int main()
 
     // free the var
     freeVar();
-
-    printf("\n");
 
     return 0;
 }
