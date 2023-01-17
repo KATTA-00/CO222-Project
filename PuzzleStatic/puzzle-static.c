@@ -16,9 +16,9 @@
 // define the macros
 #define gridRowFix 20
 #define gridColFix 20
-#define wordsNum 30
+#define wordsNum 31
 #define wordLen 10
-#define maxSpacelen 30
+#define maxSpacelen 31
 #define maxSpace 20
 
 // define a struct to store whether the particular cell is checked vertically and horizontally for adjacent spaces
